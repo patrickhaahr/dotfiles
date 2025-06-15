@@ -1,0 +1,10 @@
+[user]
+	name = patrickhaahr
+	email = 117731913+patrickhaahr@users.noreply.github.com
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[init]
+	defualtBranch = main
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global

@@ -1,0 +1,28 @@
+# foreground = c0caf5
+background = 000000
+
+theme = rose-pine-moon
+
+# window-decoration = false
+background-opacity = 0.8
+background-blur = false
+
+gtk-titlebar = false
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor, no-sudo, no-title
+
+
+# disable all font ligatures
+# font-feature = -calt
+# font-feature = -liga
+# font-feature = -dlig
+
+font-size = 13
+font-family = Caskaydia Cove Nerd Font
+# font-family = "Fira Code Nerd Font"
+# font-family-bold = "Fira Code Nerd Font"
+# font-family-italic = "Iosevka Nerd Font"
+# font-family-bold-italic = "Iosevka Nerd Font"
+
+confirm-close-surface = false
