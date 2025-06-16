@@ -21,7 +21,7 @@ error() {
 info "Installing packages from official repositories..."
 PKGS=(
   # --- System & Utilities ---
-  'base-devel' 'git' 'stow' 'amd-ucode' 'zsh' 'lsd' 'zoxide' 'neovim'
+  'base-devel' 'git' 'git-lfs' 'stow' 'amd-ucode' 'zsh' 'lsd' 'zoxide' 'neovim'
   'fzf' 'tmux' 'ffmpeg' 'wl-clipboard' 'ghostty' 'cmake' 'playerctl'
   'btop' 'fastfetch' 'zsh-syntax-highlighting' 'zsh-autosuggestions'
   'zsh-completions' 'grub' 'plymouth' 'mpv'
