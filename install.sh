@@ -36,7 +36,7 @@ PKGS=(
   # --- Wayland & GUI ---
   'hyprland' 'hyprpaper' 'hyprlock' 'hypridle' 'waybar' 'hyprshot'
   'rofi-wayland' 'xdg-desktop-portal-hyprland' 'swaync' 'nwg-look'
-  'mpvpaper'
+  'mpvpaper' 'hyprcursor'
 
   # Fonts
   'ttf-jetbrains-mono-nerd' 'ttf-cascadia-code-nerd' 'papirus-icon-theme'
@@ -78,6 +78,8 @@ AUR_PKGS=(
   'nordvpn-bin'
   'plymouth-theme-hud-3-git'
   'openlinkhub-bin'
+  'rose-pine-hyprcursor'
+  'rose-pine-cursor'
 )
 
 paru -S --needed --noconfirm "${AUR_PKGS[@]}"
