@@ -24,7 +24,7 @@ PKGS=(
   'base-devel' 'git' 'stow' 'amd-ucode' 'zsh' 'lsd' 'zoxide' 'neovim'
   'fzf' 'tmux' 'ffmpeg' 'wl-clipboard' 'ghostty' 'cmake' 'playerctl'
   'btop' 'fastfetch' 'zsh-syntax-highlighting' 'zsh-autosuggestions'
-  'zsh-completions' 'grub' 'plymouth'
+  'zsh-completions' 'grub' 'plymouth' 'mpv'
 
   # --- SDDM & Qt Dependencies ---
   'sddm' 'qt6-svg' 'qt6-virtualkeyboard' 'qt6-multimedia-ffmpeg'
@@ -36,6 +36,7 @@ PKGS=(
   # --- Wayland & GUI ---
   'hyprland' 'hyprpaper' 'hyprlock' 'hypridle' 'waybar' 'hyprshot'
   'rofi-wayland' 'xdg-desktop-portal-hyprland' 'swaync' 'nwg-look'
+  'mpvpaper'
 
   # Fonts
   'ttf-jetbrains-mono-nerd' 'ttf-cascadia-code-nerd' 'papirus-icon-theme'
@@ -76,6 +77,7 @@ AUR_PKGS=(
   'spicetify-cli'
   'nordvpn-bin'
   'plymouth-theme-hud-3-git'
+  'openlinkhub-bin'
 )
 
 paru -S --needed --noconfirm "${AUR_PKGS[@]}"
@@ -188,6 +190,11 @@ info "Setting up Spicetify..."
 sudo chmod a+wr /opt/spotify
 sudo chmod a+wr /opt/spotify/Apps -R
 spicetify backup apply
+
+info "Applying post-installation fix for OpenLinkHub..."
+sudo chown -R openlinkhub:openlinkhub /opt/openlinkhub
+info "Enabling and starting the OpenLinkHub service..."
+sudo systemctl enable --now openlinkhub.service
 
 # --- 7. Stow Dotfiles ---
 info "Stowing dotfiles..."
