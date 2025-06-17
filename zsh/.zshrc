@@ -77,3 +77,9 @@ setopt hist_find_no_dups
 # Shell integrations
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+
+# --- Tmux Auto-Attach ---
+# Auto-attach to or create a tmux session when opening a new terminal
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach -t main || tmux new -s main
+fi
