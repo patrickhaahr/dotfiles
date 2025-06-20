@@ -4,7 +4,7 @@
 # to a permanent location, and copies the FILE PATH to the clipboard.
 
 # --- Configuration ---
-DURATION=5
+DURATION=8
 # The final GIFs will be saved here.
 CAPTURE_DIR="$HOME/Pictures/GIF-Captures"
 
@@ -28,7 +28,7 @@ if [ -z "$GEOMETRY" ]; then exit 1; fi
 
 # 2. Record a high-quality video
 notify-send "GIF Capture" "Recording..."
-wf-recorder -y --codec h264_vaapi -g "$GEOMETRY" -f "$TEMP_VIDEO" &
+wf-recorder -y --codec libx264 -g "$GEOMETRY" -f "$TEMP_VIDEO" &
 WF_PID=$!
 sleep $DURATION
 kill -INT $WF_PID
