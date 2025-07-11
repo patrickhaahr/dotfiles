@@ -4,7 +4,7 @@
 # to a permanent location, and copies the FILE PATH to the clipboard.
 
 # --- Configuration ---
-DURATION=8
+DURATION=15
 # The final GIFs will be saved here.
 CAPTURE_DIR="$HOME/Pictures/GIF-Captures"
 
