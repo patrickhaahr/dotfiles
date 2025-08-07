@@ -83,3 +83,6 @@ eval "$(zoxide init --cmd cd zsh)"
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
     tmux attach -t main || tmux new -s main
 fi
+export ASPNETCORE_ENVIRONMENT=Development
+export EDITOR=nvim
+export VISUAL=nvim
