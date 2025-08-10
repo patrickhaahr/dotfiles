@@ -33,6 +33,5 @@ require "options"
 require("custom.autocmds")
 require "nvchad.autocmds"
 
-vim.schedule(function()
-  require "mappings"
-end)
+-- Load mappings immediately instead of scheduled
+require "mappings"
