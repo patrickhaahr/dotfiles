@@ -18,19 +18,20 @@ switch_to() {
   local mac="$3"
   local type="$4"
 
-  if [[ "$type" == "bluetooth" ]]; then
-    info "Ensuring Bluetooth is powered on..."
-    bluetoothctl power on
-    sleep 2
-
-    info "Connecting to $mac..."
-    if bluetoothctl connect "$mac"; then
-      info "Connected to $mac"
-    else
-      fail "Failed to connect to $mac"
-      exit 1
-    fi
-  fi
+  # --- Bluetooth connection logic ---
+  # if [[ "$type" == "bluetooth" ]]; then
+  #  info "Ensuring Bluetooth is powered on..."
+  #  bluetoothctl power on
+  #  sleep 2
+  #
+  #  info "Connecting to $mac..."
+  #  if bluetoothctl connect "$mac"; then
+  #    info "Connected to $mac"
+  #  else
+  #    fail "Failed to connect to $mac"
+  #    exit 1
+  #  fi
+  # fi
 
   info "Setting default sink to $sink"
   pactl set-default-sink "$sink"
