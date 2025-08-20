@@ -1,0 +1,51 @@
+#!/bin/bash
+# Wrapper for unzip with fallback to 7z
+
+TMP_ERR=$(mktemp)
+
+# Extract target dir if -d is used
+outdir=""
+args=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -d)
+      shift
+      outdir="$1"
+      ;;
+    *)
+      args+=("$1")
+      ;;
+  esac
+  shift
+done
+
+# Run system unzip first
+if command -v /usr/bin/unzip &>/dev/null; then
+  /usr/bin/unzip "${args[@]}" ${outdir:+-d "$outdir"} \
+    2> >(tee "$TMP_ERR" >&2)
+  status=$?
+else
+  status=1
+fi
+
+# If unzip failed with PK compat error → fallback to 7z
+if grep -q "need PK compat" "$TMP_ERR"; then
+  echo "⚠️ Falling back to 7z (newer compression method detected)..."
+  if [[ -n "$outdir" ]]; then
+    7z x "${args[@]}" -o"$outdir"
+  else
+    7z x "${args[@]}"
+  fi
+  status=$?
+fi
+
+rm -f "$TMP_ERR"
+
+# ✅ Success message
+if [[ $status -eq 0 ]]; then
+  echo "✅ Extraction completed successfully!"
+else
+  echo "❌ Extraction failed (status $status)"
+fi
+
+exit $status
