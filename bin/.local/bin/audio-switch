@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# --- Load secrets ---
+if [ -f "$HOME/.local_secrets" ]; then
+  source "$HOME/.local_secrets"
+else
+  echo "[FAIL] Missing ~/.local_secrets" >&2
+  exit 1
+fi
+
+# --- Helpers ---
+info() { echo "[INFO] $1"; }
+fail() { echo "[FAIL] $1"; }
+
+switch_to() {
+  local target="$1"
+  local sink="$2"
+  local mac="$3"
+  local type="$4"
+
+  if [[ "$type" == "bluetooth" ]]; then
+    info "Ensuring Bluetooth is powered on..."
+    bluetoothctl power on
+    sleep 2
+
+    info "Connecting to $mac..."
+    if bluetoothctl connect "$mac"; then
+      info "Connected to $mac"
+    else
+      fail "Failed to connect to $mac"
+      exit 1
+    fi
+  fi
+
+  info "Setting default sink to $sink"
+  pactl set-default-sink "$sink"
+
+  # Move active streams
+  for INPUT in $(pactl list short sink-inputs | awk '{print $1}'); do
+    pactl move-sink-input "$INPUT" "$sink"
+  done
+
+  info "Switched audio to $target"
+}
+
+# --- Main logic ---
+CURRENT=$(pactl get-default-sink)
+
+case "$1" in
+  speakers)
+    switch_to "speakers" "$SPEAKER_SINK" "$SPEAKER_MAC_ADDR" "bluetooth"
+    ;;
+  headset)
+    switch_to "headset" "$HEADSET_SINK" "" "usb"
+    ;;
+  ""|toggle)
+    if [[ "$CURRENT" == "$SPEAKER_SINK" ]]; then
+      switch_to "headset" "$HEADSET_SINK" "" "usb"
+    else
+      switch_to "speakers" "$SPEAKER_SINK" "$SPEAKER_MAC_ADDR" "bluetooth"
+    fi
+    ;;
+  *)
+    echo "Usage: $0 {speakers|headset|toggle}"
+    exit 1
+    ;;
+esac
