@@ -18,7 +18,7 @@ shell-integration-features = no-cursor, no-sudo, no-title
 # font-feature = -liga
 # font-feature = -dlig
 
-font-size = 13
+font-size = 18
 font-family = Caskaydia Cove Nerd Font
 # font-family = "Fira Code Nerd Font"
 # font-family-bold = "Fira Code Nerd Font"

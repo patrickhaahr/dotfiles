@@ -35,3 +35,6 @@ require "nvchad.autocmds"
 
 -- Load mappings immediately instead of scheduled
 require "mappings"
+
+vim.opt.number = true
+vim.opt.relativenumber = true

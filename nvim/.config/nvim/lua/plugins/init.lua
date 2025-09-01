@@ -31,6 +31,7 @@ return {
         "lua-language-server",
         "css-lsp",
         "html-lsp",
+        "clangd",
       },
     },
   },

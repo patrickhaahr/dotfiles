@@ -1,6 +1,14 @@
-require("nvchad.configs.lspconfig").defaults()
+-- configs/lspconfig.lua
+local nvlsp = require "nvchad.configs.lspconfig"
+
+-- Load NvChad defaults (on_attach, capabilities, etc.)
+nvlsp.defaults()
 
 local lspconfig = require "lspconfig"
 
--- Only configure rust-analyzer since you're using rustaceanvim
--- No need to configure servers that aren't installed
+-- Setup clangd
+lspconfig.clangd.setup {
+  on_attach = nvlsp.on_attach,
+  capabilities = nvlsp.capabilities,
+  cmd = { "clangd", "--background-index", "--clang-tidy" },
+}
