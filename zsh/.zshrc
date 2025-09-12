@@ -86,3 +86,8 @@ fi
 export ASPNETCORE_ENVIRONMENT=Development
 export EDITOR=nvim
 export VISUAL=nvim
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/patrickhaahr/.lmstudio/bin"
+# End of LM Studio CLI section
+

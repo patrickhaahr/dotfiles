@@ -20,7 +20,6 @@ return {
       require "configs.lspconfig"
     end,
   },
-  
   -- Mason auto-install
   {
     "williamboman/mason.nvim",
@@ -32,6 +31,8 @@ return {
         "css-lsp",
         "html-lsp",
         "clangd",
+        "csharp-language-server",
+        "csharper",
       },
     },
   },

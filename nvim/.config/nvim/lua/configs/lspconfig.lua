@@ -12,3 +12,12 @@ lspconfig.clangd.setup {
   capabilities = nvlsp.capabilities,
   cmd = { "clangd", "--background-index", "--clang-tidy" },
 }
+
+lspconfig.csharp_ls.setup({})
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.csharpier,
+  },
+})
