@@ -1,10 +1,10 @@
 [user]
 	name = patrickhaahr
-	email = 117731913+patrickhaahr@users.noreply.github.com
+	email = git@haahr.me
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [init]
-	defualtBranch = main
+	defualtBranch = master
 [core]
 	editor = nvim
 	excludesfile = ~/.gitignore_global
@@ -13,3 +13,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[include]
+	path = ~/.gitconfig.local

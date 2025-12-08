@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Define output directory and filename format
+OUTPUT_DIR="$HOME/Videos/Recordings"
+FILENAME=$(date +%Y-%m-%d_%H-%M-%S).mp4
+FULL_PATH="${OUTPUT_DIR}/${FILENAME}"
+STATE_FILE="/tmp/recorder.state"
+
+# Check if wf-recorder is already running
+if [ -f "$STATE_FILE" ]; then
+    # Read the PID and file path from the state file
+    source "$STATE_FILE"
+    
+    # Stop recording
+    if [ -n "$WF_PID" ] && ps -p "$WF_PID" > /dev/null 2>&1; then
+        kill -INT "$WF_PID"
+        wait "$WF_PID" 2>/dev/null
+        sleep 0.5
+        
+        # Check if video was created
+        if [ -s "$VIDEO_PATH" ]; then
+            # Copy the FILE PATH to the clipboard
+            URI="file://$(realpath "$VIDEO_PATH")"
+            echo -n "$URI" | wl-copy --type text/uri-list
+            
+            notify-send "Recording stopped" "Video saved and path copied.\nPath: $(basename "$VIDEO_PATH")"
+        else
+            notify-send "Recording failed" "Video file was not created."
+        fi
+        
+        rm -f "$STATE_FILE"
+        exit 0
+    else
+        # PID file exists but process is dead, clean up
+        rm -f "$STATE_FILE"
+    fi
+fi
+
+# Ensure the output directory exists
+mkdir -p "$OUTPUT_DIR"
+
+echo "Select the area to record..."
+
+# Get geometry from slurp and pipe it to wf-recorder
+geometry=$(slurp)
+
+if [ -n "$geometry" ]; then
+    echo "Recording selected area: $geometry to $FULL_PATH"
+    notify-send "Recording started" "Press PAUSE to stop"
+    wf-recorder -f "$FULL_PATH" --geometry "$geometry" &
+    WF_PID=$!
+    
+    # Save state to file for toggle functionality
+    cat > "$STATE_FILE" << EOF
+WF_PID=$WF_PID
+VIDEO_PATH="$FULL_PATH"
+EOF
+else
+    echo "No area selected. Exiting."
+fi

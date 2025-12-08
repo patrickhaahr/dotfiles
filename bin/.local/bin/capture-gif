@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+# This script creates a HIGH-QUALITY GIF of a selected screen area, saves it
+# to a permanent location, and copies the FILE PATH to the clipboard.
+# It supports TOGGLE functionality - press once to start, again to stop.
+
+# --- Configuration ---
+# The final GIFs will be saved here.
+CAPTURE_DIR="$HOME/Pictures/GIF-Captures"
+STATE_FILE="/tmp/capture-gif.state"
+
+# --- Resolution Settings ---
+# INCREASED FROM 640 TO 1024 FOR SHARPER OUTPUT
+TARGET_WIDTH=1024
+FPS=15
+
+# --- Check if already recording ---
+if [ -f "$STATE_FILE" ]; then
+    # Read the PID and temp files from the state file
+    source "$STATE_FILE"
+    
+    # Stop the recording
+    if [ -n "$WF_PID" ] && kill -0 "$WF_PID" 2>/dev/null; then
+        notify-send "GIF Capture" "Stopping recording..."
+        kill -INT "$WF_PID"
+        wait "$WF_PID" 2>/dev/null
+        sleep 0.5
+        
+        # Process the video into GIF
+        process_gif
+    else
+        notify-send "GIF Capture" "No active recording found"
+        rm -f "$STATE_FILE"
+    fi
+    exit 0
+fi
+
+# --- Function to process video into GIF ---
+process_gif() {
+    # Check if video was created
+    if [ ! -s "$TEMP_VIDEO" ]; then
+        notify-send "GIF Capture Failed" "Recording failed."
+        cleanup_and_exit 1
+    fi
+
+    # Convert to a High-Resolution, High-Quality GIF
+    FILENAME="capture-$(date +%F_%H-%M-%S).gif"
+    FINAL_GIF_PATH="$CAPTURE_DIR/$FILENAME"
+    
+    notify-send "GIF Capture" "Converting to GIF..."
+
+    # Pass 1: Generate a custom color palette with higher resolution scaling
+    ffmpeg -y -i "$TEMP_VIDEO" \
+        -vf "fps=$FPS,scale=$TARGET_WIDTH:-1:flags=lanczos,palettegen" "$PALETTE" \
+        >/dev/null 2>&1
+
+    # Pass 2: Use the palette to create the final high-res GIF
+    ffmpeg -y -i "$TEMP_VIDEO" -i "$PALETTE" \
+        -filter_complex "fps=$FPS,scale=$TARGET_WIDTH:-1[scaled];[scaled][1]paletteuse" \
+        "$FINAL_GIF_PATH" >/dev/null 2>&1
+
+    # Check if GIF was created
+    if [ ! -s "$FINAL_GIF_PATH" ]; then
+        notify-send "GIF Capture Failed" "Conversion failed."
+        cleanup_and_exit 1
+    fi
+
+    # Copy the FILE PATH to the clipboard
+    URI="file://$(realpath "$FINAL_GIF_PATH")"
+    echo -n "$URI" | wl-copy --type text/uri-list
+
+    # Notify user of success
+    notify-send "GIF Capture" "Success! High-res GIF saved and path copied.\nResolution: ${TARGET_WIDTH}px width, Path: $FILENAME"
+    
+    cleanup_and_exit 0
+}
+
+# --- Cleanup function ---
+cleanup_and_exit() {
+    rm -f "$TEMP_VIDEO" "$PALETTE" "$STATE_FILE"
+    exit "${1:-0}"
+}
+
+# --- Trap for cleanup on exit ---
+trap cleanup_and_exit EXIT INT TERM
+
+# --- Script Start ---
+# Ensure the destination directory exists
+mkdir -p "$CAPTURE_DIR"
+
+# --- Secure Temporary Files ---
+# These are intermediate files that will be cleaned up.
+TEMP_VIDEO=$(mktemp /tmp/screenrecord-XXXXXX.mp4)
+PALETTE=$(mktemp /tmp/palette-XXXXXX.png)
+
+# 1. Select area with slurp
+notify-send "GIF Capture" "Select an area to record..."
+GEOMETRY=$(slurp)
+if [ -z "$GEOMETRY" ]; then exit 1; fi
+
+# 2. Record a high-quality video
+notify-send "GIF Capture" "Recording... (Press keybind again to stop)"
+wf-recorder -y --codec libx264 -g "$GEOMETRY" -f "$TEMP_VIDEO" &
+WF_PID=$!
+
+# Save state to file for toggle functionality
+cat > "$STATE_FILE" << EOF
+WF_PID=$WF_PID
+TEMP_VIDEO="$TEMP_VIDEO"
+PALETTE="$PALETTE"
+TARGET_WIDTH=$TARGET_WIDTH
+FPS=$FPS
+CAPTURE_DIR="$CAPTURE_DIR"
+EOF
+
+# Wait for the wf-recorder process to finish (either by toggle or manual stop)
+wait "$WF_PID" 2>/dev/null
+sleep 0.5
+
+# Process the recorded video
+process_gif

@@ -1,5 +1,5 @@
 # Path to your Oh My Zsh installation.
-export ZSH="/usr/share/oh-my-zsh"xport ZSH="/usr/share/oh-my-zsh"
+export ZSH="/usr/share/oh-my-zsh"
 
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
@@ -91,3 +91,15 @@ export VISUAL=nvim
 export PATH="$PATH:/home/patrickhaahr/.lmstudio/bin"
 # End of LM Studio CLI section
 
+# Source local config (not tracked in git)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# Start ssh-agent if not running
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)"
+fi
+
+# Add key to agent
+ssh-add ~/.ssh/id_ed25519 2>/dev/null
+export PATH="/home/patrickhaahr/.rustup/toolchains/esp/xtensa-esp-elf/esp-15.2.0_20250920/xtensa-esp-elf/bin:$PATH"
+export LIBCLANG_PATH="/home/patrickhaahr/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-20.1.1_20250829/esp-clang/lib"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Optimized wallpaper randomizer for Hyprland
 # Dynamic monitor detection, efficient wallpaper selection

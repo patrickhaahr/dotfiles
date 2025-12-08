@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # --- Configuration ---
 # Source a local, untracked file for secrets.
