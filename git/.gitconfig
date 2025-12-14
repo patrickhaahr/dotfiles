@@ -2,7 +2,11 @@
 	name = patrickhaahr
 	email = git@haahr.me
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+  insteadof = https://github.com/
+[url "git@github.com:"]
+  insteadof = gh:
+[url "git@github.com:patrickhaahr/"]
+  insteadof = ph:
 [init]
 	defualtBranch = master
 [core]
