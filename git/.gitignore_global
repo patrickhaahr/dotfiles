@@ -1,1 +1,3 @@
 .local_secrets
+.env
+out
