@@ -103,3 +103,9 @@ fi
 ssh-add ~/.ssh/id_ed25519 2>/dev/null
 export PATH="/home/patrickhaahr/.rustup/toolchains/esp/xtensa-esp-elf/esp-15.2.0_20250920/xtensa-esp-elf/bin:$PATH"
 export LIBCLANG_PATH="/home/patrickhaahr/.rustup/toolchains/esp/xtensa-esp32-elf-clang/esp-20.1.1_20250829/esp-clang/lib"
+
+export JAVA_HOME=/usr/lib/jvm/java-25-openjdk
+export ANDROID_HOME="$HOME/Android/Sdk"
+export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
+
+export PATH="/home/patrickhaahr/.bun/bin:$PATH"
