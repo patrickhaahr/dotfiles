@@ -325,21 +325,12 @@ let app = Router::new()
 Each domain exports its own router:
 
 ```rust
-// src/routes/users.rs
-use axum::{routing::{get, post}, Router};
-
-pub fn router() -> Router<AppState> {
+pub fn router() -> Router<crate::AppState> {
     Router::new()
-        .route("/users", post(create_user))
-        .route("/users/:id", get(get_user))
-        .route("/users/:id", put(update_user))
-        .route("/users/:id", delete(delete_user))
+        .route("/api/feeds", get(get_feeds))
+        .route("/api/feeds", post(create_feed))
+        .route("/api/feeds/{id}", delete(delete_feed))
 }
-
-// In main.rs
-let app = Router::new()
-    .merge(routes::users::router())
-    .merge(routes::posts::router());
 ```
 
 **Path parameter syntax**: Axum 0.8 uses `{id}` instead of `:id` to align with OpenAPI standards.
@@ -352,7 +343,7 @@ For REST resources, chain methods on the same path:
 .use axum::routing::MethodRouter;
 
 let user_routes = Router::new()
-    .route("/users/:id", MethodRouter::new()
+    .route("/users/{id}", MethodRouter::new()
         .get(get_user)
         .put(update_user)
         .delete(delete_user)

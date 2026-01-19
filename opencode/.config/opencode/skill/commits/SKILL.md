@@ -15,6 +15,20 @@ This skill ensures that all git commit messages adhere strictly to the [Conventi
     *   Understand the context of recent work.
 3.  **Draft Message**: detailed below.
 
+### Guideline on User-Facing Descriptions
+**PREFER TO EXPLAIN WHY FROM THE END USER PERSPECTIVE, NOT WHAT WAS DONE.**
+
+*   **BE SPECIFIC**: Generic messages like "improved agent experience" or "enhanced functionality" are unacceptable. State exactly what the user can now do or how their experience changed.
+*   **FOCUS ON IMPACT**: Explain what changed for the user, not what code was modified. A user should understand the value of this commit without reading code.
+*   **GOOD EXAMPLES**:
+    *   `fix: allow users to retry failed uploads without losing progress`
+    *   `feat: add dark mode toggle to settings page`
+    *   `fix: display error messages in user's preferred language`
+*   **BAD EXAMPLES**:
+    *   `feat: improve agent experience` (vague, no specific user impact)
+    *   `fix: enhanced error handling` (what does this mean for users?)
+    *   `refactor: improved backend logic` (implementation detail, not user-facing)
+
 ### Guideline on Conciseness
 **PREFER CONCISE ONE-LINERS**.
 *   In 80-90% of cases, the subject line is sufficient.
