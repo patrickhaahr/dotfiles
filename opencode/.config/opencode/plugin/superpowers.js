@@ -1,0 +1,1 @@
+/home/patrickhaahr/.config/opencode/superpowers/.opencode/plugin/superpowers.js
