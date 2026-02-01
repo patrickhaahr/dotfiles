@@ -1,7 +1,7 @@
 ---
 description: File Search Specialist - MUST be used for all navigation and file discovery tasks
 mode: subagent
-model: opencode/grok-code
+model: github-copilot/grok-code-fast-1
 hidden: true
 tools:
   read: true
