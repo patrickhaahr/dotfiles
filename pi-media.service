@@ -1,0 +1,17 @@
+[Unit]
+Description=Mount Pi media via SSHFS
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/sshfs ph@pi:/mnt/hdd/media/books /home/patrickhaahr/pi/books -o reconnect,IdentityFile=/home/patrickhaahr/.ssh/id_ed25519_pi,idmap=user,StrictHostKeyChecking=no,ServerAliveInterval=15,ServerAliveCountMax=3
+ExecStart=/usr/bin/sshfs ph@pi:/mnt/hdd/media/movies /home/patrickhaahr/pi/movies -o reconnect,IdentityFile=/home/patrickhaahr/.ssh/id_ed25519_pi,idmap=user,StrictHostKeyChecking=no,ServerAliveInterval=15,ServerAliveCountMax=3
+ExecStart=/usr/bin/sshfs ph@pi:/mnt/hdd/media/shows /home/patrickhaahr/pi/shows -o reconnect,IdentityFile=/home/patrickhaahr/.ssh/id_ed25519_pi,idmap=user,StrictHostKeyChecking=no,ServerAliveInterval=15,ServerAliveCountMax=3
+ExecStop=/usr/bin/fusermount3 -u /home/patrickhaahr/pi/books
+ExecStop=/usr/bin/fusermount3 -u /home/patrickhaahr/pi/movies
+ExecStop=/usr/bin/fusermount3 -u /home/patrickhaahr/pi/shows
+
+[Install]
+WantedBy=default.target

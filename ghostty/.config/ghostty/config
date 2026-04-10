@@ -1,7 +1,7 @@
 # foreground = c0caf5
 background = 000000
 
-theme = rose-pine-moon
+#theme = rose-pine-moon
 
 # window-decoration = false
 background-opacity = 0.8
