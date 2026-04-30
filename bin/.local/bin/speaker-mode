@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ENV_FILE="$HOME/.local_secrets"
+wait_for_api=false
+retries=1
+retry_delay=5
+
+while (($# > 0)); do
+  case "$1" in
+    --wait)
+      wait_for_api=true
+      retries=12
+      shift
+      ;;
+    --retries)
+      retries="${2:?Missing value for --retries}"
+      shift 2
+      ;;
+    --retry-delay)
+      retry_delay="${2:?Missing value for --retry-delay}"
+      shift 2
+      ;;
+    --help|-h)
+      printf 'Usage: speaker-mode [--wait] [--retries N] [--retry-delay SECONDS] <bluetooth|optical|mute|volume-up|volume-down|power|test>\n'
+      exit 0
+      ;;
+    --*)
+      printf 'Unknown option: %s\n' "$1" >&2
+      exit 1
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+if [ -f "$ENV_FILE" ]; then
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+fi
+
+command="${1:?Usage: speaker-mode [--wait] [--retries N] [--retry-delay SECONDS] <bluetooth|optical|mute|volume-up|volume-down|power|test>}"
+
+if [ "$wait_for_api" = true ] && [ "$retries" -lt 12 ]; then
+  retries=12
+fi
+
+attempt=1
+while true; do
+  if curl \
+    --fail \
+    --silent \
+    --show-error \
+    --max-time 5 \
+    --request POST \
+    --data-urlencode "command=$command" \
+    "${SPEAKER_API_URL}"; then
+    printf '\n'
+    break
+  fi
+
+  if [ "$attempt" -ge "$retries" ]; then
+    exit 1
+  fi
+
+  attempt=$((attempt + 1))
+  sleep "$retry_delay"
+done

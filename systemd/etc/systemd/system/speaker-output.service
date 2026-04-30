@@ -1,0 +1,16 @@
+[Unit]
+Description=Set speaker output mode on boot and shutdown
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=patrickhaahr
+RemainAfterExit=yes
+ExecStart=/home/patrickhaahr/.local/bin/speaker-mode --wait bluetooth
+ExecStop=/home/patrickhaahr/.local/bin/speaker-mode --wait --retries 6 optical
+TimeoutStartSec=90
+TimeoutStopSec=40
+
+[Install]
+WantedBy=multi-user.target
