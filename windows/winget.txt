@@ -1,0 +1,18 @@
+winget install -e --id ZedIndustries.Zed
+winget install wez.wezterm
+winget install GlazeWM
+winget install --id Git.Git -e --source winget
+winget install nushell
+winget install Neovim.Neovim
+winget install Microsoft.PowerToys
+winget install Microsoft.DotNet.Runtime.10 Microsoft.DotNet.SDK.10
+winget install --id Casey.Just --exact
+winget install --id=SST.opencode -e
+winget install -e --id Oven-sh.Bun
+winget install Starship.Starship
+winget install typst
+
+winget install sxyazi.yazi
+
+winget install Gyan.FFmpeg 7zip.7zip jqlang.jq oschwartz10612.Poppler sharkdp.fd BurntSushi.ripgrep.MSVC junegunn.fzf ajeetdsouza.zoxide ImageMagick.ImageMagick
+
